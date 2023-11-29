@@ -7,9 +7,11 @@ const server = require("./app.js")
 mongoose.connect(process.env.MONGO_CONN)
 .then(connection => {
     console.log("DB connection successful")
+}).catch(err => {
+    console.log(`DB connection failed \n${err}`)
 })
 
-app.listen(process.env.PORT || 8080, () => {
+server.listen(process.env.PORT || 8080, () => {
     console.log("server has started...")
 })
 

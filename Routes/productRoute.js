@@ -1,5 +1,11 @@
-app.get("/products", (req, res) => {
-    res.status(200).json({
-        status: "so far so good"
-    })
-})
+const controllers = require("../Controller/productsController");
+const express = require("express")
+const router = express.Router()
+
+
+router.route("/").get(controllers.getProducts)
+
+module.exports = router
+
+
+ 
