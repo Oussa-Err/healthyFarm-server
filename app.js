@@ -10,7 +10,5 @@ app.use(morgan("dev"))
 
 app.use("/api/v1/products", productRoute)
 
-
-
 module.exports = app
  
