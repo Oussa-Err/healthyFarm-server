@@ -1,4 +1,4 @@
-const Vegetables = require("../Model/productModel")
+const Vegetables = require("../Model/vegetableModel.js")
 
 
 exports.getProducts = async (req, res) => {
