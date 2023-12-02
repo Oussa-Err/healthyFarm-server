@@ -1,11 +1,12 @@
-class CustumErr extends Error {
-    constructor(statusCode, statusMsg) {
+class CustomError extends Error {
+    constructor(message, statusCode) {
         super(message)
-        statusCode = this.statusCode || 400
-        statusMsg = this.statusMsg || "something went wrong try again later"
+        this.statusCode = statusCode
+        this.status = statusCode >= 400 && statusCode <= 500 ? "fail" : "error"
+        this.isOperational = true
 
         Error.captureStackTrace(this, this.constructor);
     }
 }
 
-module.exports = CustumErr
+module.exports = CustomError

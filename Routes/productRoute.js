@@ -5,7 +5,5 @@ const router = express.Router()
 
 router.route("/").get(controllers.getProducts)
 router.route("/:id").get(controllers.getProductsById)
-    // .delete(controllers.deleteProduct)
-    // .patch(controllers.updateProduct)
 
 module.exports = router
