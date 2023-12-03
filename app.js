@@ -3,11 +3,12 @@ const morgan = require("morgan")
 const productRoute = require("./Routes/productRoute")
 const globaleErrController = require("./Controller/globaleErrController")
 const CustomError = require("./Utils/CustumErr")
-
+const cors = require("cors")
 const app = express()
 
 app.use(express.json())
 app.use(morgan("dev"))
+app.use(cors())
 
 app.use("/api/v1/products", productRoute)
 
