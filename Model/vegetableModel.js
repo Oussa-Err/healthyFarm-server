@@ -6,11 +6,18 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     photo_url: {
-        type: String,
-        required: true
+        public_id: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: true
+        }
     },
     quantity: {
         type: String,
+        default: "2kg",
         required: true
     },
     price: {

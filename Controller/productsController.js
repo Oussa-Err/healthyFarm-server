@@ -1,5 +1,6 @@
 const Vegetables = require("../Model/vegetableModel.js")
 const asyncErrHandler = require("../Utils/asyncErrHandler.js")
+const cloudinary = require("../Utils/cloudinary.js")
 
 
 exports.getProducts = asyncErrHandler(async (req, res) => {
@@ -14,9 +15,37 @@ exports.getProducts = asyncErrHandler(async (req, res) => {
 exports.getProductsById = asyncErrHandler(async (req, res) => {
 
     const vegetable = await Vegetables.findById(req.params.id)
-    
+
     res.status(200).json({
         status: "success!",
         data: vegetable
+    })
+})
+
+
+exports.createVegetable = asyncErrHandler(async (req, res) => {
+    const { name, price, photo_url, quantity } = req.body
+
+    const image = await cloudinary.uploader.upload(photo_url, {
+        use_filename: true,
+        unique_filename: true,
+        folder: "vegetables",
+        tags: 'healthyFarm',
+    })
+
+
+    const product = await Vegetables.create({
+        name,
+        price,
+        photo_url: {
+            public_id: image.public_id,
+            url: image.secure_url
+        },
+        quantity
+    })
+
+    res.status(200).json({
+        status: "success!",
+        data: product
     })
 })

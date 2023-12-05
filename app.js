@@ -19,4 +19,4 @@ app.all("*", (req, res, next) => {
 app.use(globaleErrController)
 
 module.exports = app
- 
+
