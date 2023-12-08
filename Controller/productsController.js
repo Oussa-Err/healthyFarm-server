@@ -24,24 +24,25 @@ exports.getProductsById = asyncErrHandler(async (req, res) => {
 
 
 exports.createVegetable = asyncErrHandler(async (req, res) => {
-    const { name, price, photo_url, quantity } = req.body
-
+    const { name, price, photo_url } = req.body
+    console.log("executed...")
     const image = await cloudinary.uploader.upload(photo_url, {
         use_filename: true,
         unique_filename: true,
         folder: "vegetables",
         tags: 'healthyFarm',
-    })
-
+    }).catch(err => {console.log(err)})
+    
+    console.log(image)
+    console.log("\n "+ req.body)
 
     const product = await Vegetables.create({
         name,
         price,
         photo_url: {
             public_id: image.public_id,
-            url: image.secure_url
+            url: image.url
         },
-        quantity
     })
 
     res.status(200).json({

@@ -9,6 +9,7 @@ const app = express()
 app.use(express.json())
 app.use(morgan("dev"))
 app.use(cors())
+app.options('*', cors());
 
 app.use("/api/v1/products", productRoute)
 
