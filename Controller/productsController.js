@@ -25,7 +25,7 @@ exports.getProductsById = asyncErrHandler(async (req, res) => {
 
 exports.createVegetable = asyncErrHandler(async (req, res) => {
     const { name, price, photo_url } = req.body
-    
+
     const image = await cloudinary.uploader.upload(photo_url, {
         use_filename: true,
         unique_filename: true,
@@ -41,7 +41,7 @@ exports.createVegetable = asyncErrHandler(async (req, res) => {
         price,
         photo_url: {
             public_id: image.public_id,
-            url: image.url
+            url: image.secure_url
         },
     })
 
