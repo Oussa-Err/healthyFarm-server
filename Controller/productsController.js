@@ -25,7 +25,7 @@ exports.getProductsById = asyncErrHandler(async (req, res) => {
 
 exports.createVegetable = asyncErrHandler(async (req, res) => {
     const { name, price, photo_url } = req.body
-    console.log("executed...")
+    
     const image = await cloudinary.uploader.upload(photo_url, {
         use_filename: true,
         unique_filename: true,
@@ -45,8 +45,8 @@ exports.createVegetable = asyncErrHandler(async (req, res) => {
         },
     })
 
-    res.status(200).json({
-        status: "success!",
+    res.status(201).json({
+        status: "created!",
         data: product
     })
 })
