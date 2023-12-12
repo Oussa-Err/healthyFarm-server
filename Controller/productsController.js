@@ -1,7 +1,7 @@
 const Vegetables = require("../Model/vegetableModel.js")
 const asyncErrHandler = require("../Utils/asyncErrHandler.js")
 const cloudinary = require("../Utils/cloudinary.js")
-
+const CustomErr = require("../Utils/CustomErr.js")
 
 exports.getProducts = asyncErrHandler(async (req, res) => {
     const vegetables = await Vegetables.find()
@@ -12,9 +12,14 @@ exports.getProducts = asyncErrHandler(async (req, res) => {
     })
 })
 
-exports.getProductsById = asyncErrHandler(async (req, res) => {
+exports.getProductsById = asyncErrHandler(async (req, res, next) => {
 
     const vegetable = await Vegetables.findById(req.params.id)
+
+    if (!vegetable) {
+        const error = new CustomErr(`this ID: ${req.params.id} is not found`, 404)
+        return next(error)
+    }
 
     res.status(200).json({
         status: "success!",
@@ -31,10 +36,10 @@ exports.createVegetable = asyncErrHandler(async (req, res) => {
         unique_filename: true,
         folder: "vegetables",
         tags: 'healthyFarm',
-    }).catch(err => {console.log(err)})
-    
+    }).catch(err => { console.log(err) })
+
     console.log(image)
-    console.log("\n "+ req.body)
+    console.log("\n " + req.body)
 
     const product = await Vegetables.create({
         name,

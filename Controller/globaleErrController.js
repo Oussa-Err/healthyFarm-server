@@ -1,6 +1,6 @@
 const dotenv = require("dotenv")
 dotenv.config({path: "../.env"})
-const CustumErr = require("../Utils/CustumErr")
+const CustomErr = require("../Utils/CustomErr")
 
 
 const devErr = (res, err) => {
@@ -30,7 +30,7 @@ const prodErr = (res, err) => {
 const castErr = (err) => {
     console.log(err)
     const msg = `invalid value for ${err.path}: ${err.value}`
-    return new CustumErr(msg, 404)
+    return new CustomErr(msg, 404)
 }
 
 module.exports = (err, req, res, next) => {

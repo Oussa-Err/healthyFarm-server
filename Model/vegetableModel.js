@@ -23,6 +23,10 @@ const productSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now()
     }
 }, { toJSON: { virtuals: true }, toObject: { virtuals: true } });
 

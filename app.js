@@ -1,8 +1,9 @@
 const express = require("express")
 const morgan = require("morgan")
-const productRoute = require("./Routes/productRoute")
+const productRoute = require("./Routes/productRoute.js")
+const userRoute = require("./Routes/userRoute.js")
 const globaleErrController = require("./Controller/globaleErrController")
-const CustomError = require("./Utils/CustumErr")
+const CustomError = require("./Utils/CustomErr")
 const cors = require("cors")
 const app = express()
 
@@ -12,6 +13,7 @@ app.use(cors())
 app.options('*', cors());
 
 app.use("/api/v1/products", productRoute)
+app.use("/api/v1/users", userRoute)
 
 app.all("*", (req, res, next) => {
     next(new CustomError(`url ${req.originalUrl} not found`, 404))
