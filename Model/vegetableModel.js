@@ -16,12 +16,12 @@ const productSchema = new mongoose.Schema({
         }
     },
     genre: {
-        type: String,
+        type: [String],
         required: [true, "genre is a required field"],
-        enum: {
-            value: ["vegetables", "meat", "oil"],
-            message: "the genre should be only whitin these {{VALUE}}"
-        }
+        // enum: {
+        //     value: ["vegetables", "meat", "oil"],
+        //     message: "the genre should be only whitin these {{VALUE}}"
+        // }
     },
     quantity: {
         type: String,
