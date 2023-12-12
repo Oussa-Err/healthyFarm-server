@@ -3,6 +3,7 @@ const User = require("../Model/userModel.js")
 
 exports.getUsers = asyncErrHandler(async (req, res) => {
     const users = await User.find({})
+    
 
     res.status(200).json({
         status: "success!",
@@ -11,11 +12,13 @@ exports.getUsers = asyncErrHandler(async (req, res) => {
 })
 
 exports.createUser = asyncErrHandler(async (req, res) => {
-    console.log(req.param)
-    const userData = req.param
+    console.log(req.body)
+    const userData = await User.create(req.body)
 
     res.status(200).json({
-        status: "",
+        status: "created!",
         data: userData
     })
 })
+
+
