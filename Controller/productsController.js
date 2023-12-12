@@ -60,7 +60,7 @@ exports.updateProduct = asyncErrHandler(async (req, res, next) => {
     const product = await Vegetables.findOne({"_id": req.params.id})
 
     if(!product) {
-        next(new CustomErr(`this ID: ${req.params.id} is not found`))
+        next(new CustomErr(`this ID: ${req.params.id} is not found`, 400))
     }
 
     const updatedProduct = await Vegetables.findByIdAndUpdate(product._id, req.body)
@@ -80,7 +80,7 @@ exports.deleteProduct = asyncErrHandler(async (req, res, next) => {
 
     if (!deletedProduct) {
         const msg = `this ID: ${req.params.id} is not found`
-        next(msg, 404)
+        next(msg, 400)
     }
 
     res.status(200).json({

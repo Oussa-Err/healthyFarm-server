@@ -15,6 +15,14 @@ const productSchema = new mongoose.Schema({
             required: true
         }
     },
+    genre: {
+        type: String,
+        required: [true, "genre is a required field"],
+        enum: {
+            value: ["vegetables", "meat", "oil"],
+            message: "the genre should be only whitin these {{VALUE}}"
+        }
+    },
     quantity: {
         type: String,
         default: "2kg",
