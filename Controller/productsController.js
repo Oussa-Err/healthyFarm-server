@@ -4,13 +4,21 @@ const cloudinary = require("../Utils/cloudinary.js")
 const CustomErr = require("../Utils/CustomErr.js")
 
 exports.getProducts = asyncErrHandler(async (req, res) => {
-    const vegetables = await Vegetables.find()
+    let products = await Vegetables.find();
+    console.log(typeof req.query.fields)
+    if (req.query.genre) {
+        const genre = req.query.genre
+        console.log(genre);
+        products = products.find({genre: genre});
+    }
 
+    console.log(products)
     res.status(200).json({
-        status: "so far so good",
-        data: vegetables
-    })
-})
+        status: "success",
+        data: products,
+    });
+}
+)
 
 exports.getProductsById = asyncErrHandler(async (req, res, next) => {
 
@@ -57,9 +65,9 @@ exports.createVegetable = asyncErrHandler(async (req, res) => {
 })
 
 exports.updateProduct = asyncErrHandler(async (req, res, next) => {
-    const product = await Vegetables.findOne({"_id": req.params.id})
+    const product = await Vegetables.findOne({ "_id": req.params.id })
 
-    if(!product) {
+    if (!product) {
         next(new CustomErr(`this ID: ${req.params.id} is not found`, 400))
     }
 
@@ -68,13 +76,13 @@ exports.updateProduct = asyncErrHandler(async (req, res, next) => {
     console.log(req.params.id)
 
     res.status(200).json({
-        status: "updated!", 
+        status: "updated!",
         data: updatedProduct
     })
 })
 
 exports.deleteProduct = asyncErrHandler(async (req, res, next) => {
-    const deletedProduct = await Vegetables.deleteOne({"_id":req.params.id})
+    const deletedProduct = await Vegetables.deleteOne({ "_id": req.params.id })
 
     console.log(req.params.id)
 
