@@ -4,21 +4,22 @@ const cloudinary = require("../Utils/cloudinary.js")
 const CustomErr = require("../Utils/CustomErr.js")
 
 exports.getProducts = asyncErrHandler(async (req, res) => {
-    let products = await Vegetables.find();
-    console.log(typeof req.query.fields)
+    let products
     if (req.query.genre) {
         const genre = req.query.genre
-        console.log(genre);
-        products = products.find({genre: genre});
+        products = await Vegetables.find({ genre });
+    } else if (req.query.name) {
+        const name = req.query.name
+        products = await Vegetables.find({ name })
+    } else {
+        products = await Vegetables.find();
     }
 
-    console.log(products)
     res.status(200).json({
         status: "success",
         data: products,
     });
-}
-)
+})
 
 exports.getProductsById = asyncErrHandler(async (req, res, next) => {
 
@@ -34,7 +35,6 @@ exports.getProductsById = asyncErrHandler(async (req, res, next) => {
         data: vegetable
     })
 })
-
 
 exports.createVegetable = asyncErrHandler(async (req, res) => {
     const { name, price, photo_url } = req.body
