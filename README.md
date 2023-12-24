@@ -22,7 +22,7 @@ This repository contains the backend codebase for the HealthyFarm application. H
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/YOUR_USERNAME/backend-repo.git`
+1. Clone the repository: `git clone https://github.com/Oussa-Err/healthyFarm-server.git`
 2. Install dependencies: `npm install`
 
 ## Usage
