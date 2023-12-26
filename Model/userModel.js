@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: [8, 'minimum 8 characters'],
-        select: false
+        // select: false
     },
     confirmedPassword: {
         type: String,
@@ -49,19 +49,18 @@ const userSchema = new mongoose.Schema({
     }
 }, { toJSON: { virtuals: true }, toObject: { virtuals: true } })
 
-userSchema.pre("save", async function(next){
+userSchema.pre("save", async function (next) {
     this.createdBy = this.name
 
-    console.log("executed")
-    if(!this.isModified("password")) next()
+    if (!this.isModified("password")) next()
     this.password = await bcrypt.hash(this.password, 10)
     this.confirmedPassword = undefined;
-    console.log(this.password)
     next()
     return next(err)
 })
 
-userSchema.methods.comparePwds = async function(password, dbPassword) {
+userSchema.methods.comparePwdToDbPwd = async function (password, dbPassword) {
+    console.log(password + dbPassword)
     return await bcrypt.compare(password, dbPassword)
 }
 

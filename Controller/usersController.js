@@ -10,7 +10,7 @@ const signToken = (id) => {
 }
 
 exports.getUsers = asyncErrHandler(async (req, res) => {
-    const users = await User.find({}).select(["-password", "-confirmedPassword"])
+    const users = await User.find({})
 
     res.status(200).json({
         status: "success!",
@@ -20,7 +20,7 @@ exports.getUsers = asyncErrHandler(async (req, res) => {
 
 exports.singUp = asyncErrHandler(async (req, res) => {
     const user = await User.create(req.body)
-    
+
     const token = signToken(req.body._id)
     res.status(200).json({
         status: "created!",
@@ -28,28 +28,24 @@ exports.singUp = asyncErrHandler(async (req, res) => {
     })
 })
 
-exports.login = asyncErrHandler(async (req, res) => {
+exports.login = asyncErrHandler(async (req, res, next) => {
+    
     const { email, password } = req.body
-
     if (!email || !password) {
         const msg = "please enter both email and password"
         next(new CustomErr(msg, 400))
     }
 
     const user = await User.findOne({ email })
-
     if (!user) {
         const msg = "user doesn't exist"
         next(new CustomErr(msg, 400))
     }
 
     const isMatch = await user.comparePwdToDbPwd(password, user.password)
-
     if (!!!isMatch) {
         next(new CustomErr("password or email invalid", 400))
     }
-
-
     const token = signToken(user.id)
 
     console.log(user)
