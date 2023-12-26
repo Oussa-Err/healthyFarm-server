@@ -2,6 +2,7 @@ const fs = require('fs')
 const Vegetables = require("../Model/vegetableModel.js")
 const mongoose = require("mongoose")
 const dotenv = require("dotenv")
+const Users = require('../Model/userModel.js')
 dotenv.config({path: ".env"})
 
 mongoose.connect(process.env.MONGO_CONN)
@@ -28,8 +29,9 @@ const importData = async () => {
 const deleteData = async () => {
 
     try {
-        await Vegetables.deleteMany({})
-        console.log("vegetables deleted successful")
+        // await Vegetables.deleteMany({})
+        await Users.deleteMany({})
+        console.log("users deleted successful")
         process.exit(1)
     }catch(error) {
         console.log(error)

@@ -1,9 +1,11 @@
+const jwt = require("jsonwebtoken")
 const mongoose = require("mongoose")
 const validator = require("validator")
+const bcrypt = require("bcrypt")
 
 const userSchema = new mongoose.Schema({
     name: {
-        type: String, 
+        type: String,
         required: true,
         unique: true,
         minlength: [3, "user name must be at least 3 characters"]
@@ -11,7 +13,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         unique: true,
-        lowercase: true, 
+        lowercase: true,
         required: true,
         validate: [validator.isEmail, "please enter a valid email"]
     },
@@ -22,15 +24,47 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true, 
+        required: true,
         minlength: [8, 'minimum 8 characters'],
+        select: false
+    },
+    confirmedPassword: {
+        type: String,
+        required: true,
+        validate: {
+            validator: function () {
+                return this.confirmedPassword === this.password
+            },
+            message: "confirmed password should match the password"
+        },
+
         select: false
     },
     createdAt: {
         type: Date,
         default: Date.now()
+    },
+    createdBy: {
+        type: String,
     }
+}, { toJSON: { virtuals: true }, toObject: { virtuals: true } })
+
+userSchema.pre("save", async function(next){
+    this.createdBy = this.name
+
+    console.log("executed")
+    if(!this.isModified("password")) next()
+    this.password = await bcrypt.hash(this.password, 10)
+    this.confirmedPassword = undefined;
+    console.log(this.password)
+    next()
+    return next(err)
 })
+
+userSchema.methods.comparePwds = async function(password, dbPassword) {
+    return await bcrypt.compare(password, dbPassword)
+}
+
 
 const Users = mongoose.model("Users", userSchema)
 
