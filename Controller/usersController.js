@@ -28,8 +28,8 @@ exports.singUp = asyncErrHandler(async (req, res) => {
     })
 })
 
-exports.login = asyncErrHandler(async (req, res, next) => {
-    
+exports.logIn = asyncErrHandler(async (req, res, next) => {
+
     const { email, password } = req.body
     if (!email || !password) {
         const msg = "please enter both email and password"
@@ -54,5 +54,7 @@ exports.login = asyncErrHandler(async (req, res, next) => {
         data: token
     })
 })
+
+exports.logOut
 
 

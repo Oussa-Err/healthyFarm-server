@@ -1,4 +1,3 @@
-const jwt = require("jsonwebtoken")
 const mongoose = require("mongoose")
 const validator = require("validator")
 const bcrypt = require("bcrypt")
@@ -37,8 +36,6 @@ const userSchema = new mongoose.Schema({
             },
             message: "confirmed password should match the password"
         },
-
-        select: false
     },
     createdAt: {
         type: Date,
@@ -60,7 +57,6 @@ userSchema.pre("save", async function (next) {
 })
 
 userSchema.methods.comparePwdToDbPwd = async function (password, dbPassword) {
-    console.log(password + dbPassword)
     return await bcrypt.compare(password, dbPassword)
 }
 
