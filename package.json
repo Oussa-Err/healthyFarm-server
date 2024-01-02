@@ -6,9 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "prod": "NODE_ENV=prodution nodemon server.js",
+    "prod": "NODE_ENV=production nodemon server.js",
     "dev": "NODE_ENV=development nodemon server.js"
-
   },
   "author": "Healthy Farm",
   "license": "ISC",

@@ -13,6 +13,7 @@ const devErr = (res, err) => {
 }
 
 const prodErr = (res, err) => {
+    
     if (err.isOperational) {
         res.status(err.statusCode).json({
             status: err.status,
@@ -33,25 +34,28 @@ const castErr = (err) => {
 }
 
 const duplicateKeyErr = (err) => {
-    console.log("executed..")
-    if (err.KeyValue.name) return new CustomErr("this name already exist")
-    if (err.KeyValue.email) return new CustomErr("this email already exist", 400)
+    let message
+
+    if (err.keyValue.name) message = new CustomErr(`this name already exists: ${err.keyValue.name}`, 400)
+
+    if (err.keyValue.email) message = new CustomErr(`this email already exists: ${err.keyValue.email}`, 400)
+
+    return message
 }
 
-const tokenExpiredErr = (err) => {
+const tokenExpiredErr = () => {
     return new CustomErr("long time no see, please log in again", 401)
 }
 
 module.exports = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500
     err.status = err.status || "error"
+
     if (process.env.NODE_ENV === "development") {
-        console.log("executed..")
         devErr(res, err)
     }
 
     if (process.env.NODE_ENV === "production") {
-        console.log("executed..")
 
         if (err.name === "CastError") err = castErr(err)
 
