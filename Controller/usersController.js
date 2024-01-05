@@ -15,7 +15,7 @@ exports.getUsers = asyncErrHandler(async (req, res, next) => {
     const users = await User.find({})
 
     res.status(200).json({
-        status: "success!",
+        status: "success",
         data: users
     })
 })
@@ -26,7 +26,7 @@ exports.singUp = asyncErrHandler(async (req, res) => {
     const token = signToken(req.body._id)
 
     res.status(200).json({
-        status: "created!",
+        status: "success",
         user
     })
 })
@@ -52,7 +52,7 @@ exports.logIn = asyncErrHandler(async (req, res, next) => {
     const token = signToken(user.id)
 
     res.status(200).json({
-        status: "loged in!",
+        status: "success",
         data: token
     })
 })
