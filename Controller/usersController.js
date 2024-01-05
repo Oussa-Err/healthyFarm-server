@@ -4,17 +4,18 @@ const User = require("../Model/userModel.js")
 const CustomErr = require("../Utils/CustomErr.js")
 const dotenv = require("dotenv")
 const util = require('util')
+
 dotenv.config({ path: "../.env" })
 
 const signToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_PRIVATE_KEY, { expiresIn: "1h" })
 }
 
-exports.getUsers = asyncErrHandler(async (req, res) => {
+exports.getUsers = asyncErrHandler(async (req, res, next) => {
     const users = await User.find({})
 
     res.status(200).json({
-        status: "success!", 
+        status: "success!",
         data: users
     })
 })
@@ -31,9 +32,8 @@ exports.singUp = asyncErrHandler(async (req, res) => {
 })
 
 exports.logIn = asyncErrHandler(async (req, res, next) => {
-
     const { email, password } = req.body
-    console.log(email + password)
+
     if (!email || !password) {
         const msg = "please enter both email and password"
         next(new CustomErr(msg, 400))

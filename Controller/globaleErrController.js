@@ -20,13 +20,20 @@ const prodErr = (res, err) => {
             message: err.message
         })
     } else {
-        res.status(500).status({
+        res.status(500).json({
             status: "error",
             message: "error unknown, please try again later"
         })
     }
 }
 
+
+const validationError = (err) => {
+    const errObj = err.errors
+    for (const key in errObj) {
+        return new CustomErr(errObj[key].message, 400)
+    }
+}
 
 const castErr = (err) => {
     const msg = `invalid value for ${err.path}: ${err.value}`
@@ -56,6 +63,8 @@ module.exports = (err, req, res, next) => {
     }
 
     if (process.env.NODE_ENV === "production") {
+
+        if (err.name === "ValidationError") err = validationError(err)
 
         if (err.name === "CastError") err = castErr(err)
 
