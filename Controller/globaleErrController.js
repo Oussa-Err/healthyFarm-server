@@ -22,7 +22,7 @@ const prodErr = (res, err) => {
     } else {
         res.status(500).json({
             status: "error",
-            message: "error unknown, please try again later"
+            message: "Error unknown, please try again later"
         })
     }
 }
@@ -36,22 +36,22 @@ const validationError = (err) => {
 }
 
 const castErr = (err) => {
-    const msg = `invalid value for ${err.path}: ${err.value}`
+    const msg = `Invalid value for ${err.path}: ${err.value}`
     return new CustomErr(msg, 404)
 }
 
 const duplicateKeyErr = (err) => {
     let message
 
-    if (err.keyValue.name) message = new CustomErr(`this name already exists: ${err.keyValue.name}`, 400)
+    if (err.keyValue.name) message = new CustomErr(`This name already exists: ${err.keyValue.name}`, 400)
 
-    if (err.keyValue.email) message = new CustomErr(`this email already exists: ${err.keyValue.email}`, 400)
+    if (err.keyValue.email) message = new CustomErr(`This email already exists: ${err.keyValue.email}`, 400)
 
     return message
 }
 
 const tokenExpiredErr = () => {
-    return new CustomErr("long time no see, please log in again", 401)
+    return new CustomErr("Long time no see, please log in again", 401)
 }
 
 module.exports = (err, req, res, next) => {

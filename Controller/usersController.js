@@ -35,25 +35,30 @@ exports.logIn = asyncErrHandler(async (req, res, next) => {
     const { email, password } = req.body
 
     if (!email || !password) {
-        const msg = "please enter both email and password"
+        const msg = "Please enter both email and password"
         next(new CustomErr(msg, 400))
     }
 
     const user = await User.findOne({ email })
     if (!user) {
-        const msg = "user doesn't exist"
+        const msg = "User doesn't exist"
         next(new CustomErr(msg, 400))
     }
 
     const isMatch = await user.comparePwdToDbPwd(password, user.password)
-    if (!!!isMatch) {
-        next(new CustomErr("password or email invalid", 400))
+    console.log(isMatch)
+    if (!isMatch) {
+        const errorMsg = "Password invalid.";
+        return res.status(401).json({ status: "fail", message: errorMsg });
     }
+
+
     const token = signToken(user.id)
 
     res.status(200).json({
         status: "success",
-        data: token
+        user,
+        token
     })
 })
 
@@ -82,7 +87,3 @@ exports.protect = asyncErrHandler(async (req, res, next) => {
     req.user = user
     next()
 })
-
-// exports.logOut
-
-
