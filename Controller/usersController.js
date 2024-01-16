@@ -27,34 +27,41 @@ exports.singUp = asyncErrHandler(async (req, res) => {
 
     res.status(200).json({
         status: "success",
-        user
+        user,
+        token
     })
 })
 
 exports.logIn = asyncErrHandler(async (req, res, next) => {
     const { email, password } = req.body
-
+    
     if (!email || !password) {
         const msg = "Please enter both email and password"
         next(new CustomErr(msg, 400))
     }
-
+    
     const user = await User.findOne({ email })
     if (!user) {
-        const msg = "User doesn't exist"
+        const msg = "Sorry, your e-mail address is not registered."
         next(new CustomErr(msg, 400))
     }
 
     const isMatch = await user.comparePwdToDbPwd(password, user.password)
     console.log(isMatch)
     if (!isMatch) {
-        const errorMsg = "Password invalid.";
+        const errorMsg = "Please check your e-mail address or password.";
         return res.status(401).json({ status: "fail", message: errorMsg });
     }
-
-
+    
+    
     const token = signToken(user.id)
 
+    res.cookie("jwt", token, {
+        maxAge: 600000,
+        httpOnly: true,
+        // secure: true
+    })
+    
     res.status(200).json({
         status: "success",
         user,
