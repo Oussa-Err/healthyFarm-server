@@ -6,10 +6,13 @@ const globaleErrController = require("./Controller/globaleErrController")
 const CustomError = require("./Utils/CustomErr")
 const cors = require("cors")
 const app = express()
+const cookieParser = require("cookie-parser")
 
+app.use(cookieParser())
 app.use(express.json({ limit: "25mb" }))
 app.use(morgan("dev"))
 app.use(cors())
+
 app.options('*', cors());
 
 app.use("/api/v1/products", productRoute)
