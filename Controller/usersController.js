@@ -55,11 +55,6 @@ exports.logIn = asyncErrHandler(async (req, res, next) => {
 
     const token = signToken(user.id)
 
-    console.log(req.header.authorization)
-
-    console.log(req.cookies)
-
-
     // res.cookie("jwt", token, {
     //     maxAge: 10000000,
     //     httpOnly: true,
@@ -82,19 +77,18 @@ exports.protect = asyncErrHandler(async (req, res, next) => {
     }
 
     if (!token) {
-        const err = new CustomErr('you are not logged in', 401)
+        const err = new CustomErr('You are not logged in', 401)
         next(err)
     }
 
     const decodedToken = await util.promisify(jwt.verify)(token, process.env.JWT_PRIVATE_KEY)
 
-    const user = await User.findOne({ _id: decodedToken._id })
+    const user = await User.findOne({ id: decodedToken._id })
 
     if (!user) {
-        const err = new CustomErr('user is missing login again ', 401)
+        const err = new CustomErr('User is missing', 401)
         next(err)
     }
-
 
     req.user = user
     next()
