@@ -47,11 +47,14 @@ exports.logIn = asyncErrHandler(async (req, res, next) => {
     }
 
     const isMatch = await user.comparePwdToDbPwd(password, user.password)
+
     if (!isMatch) {
         const errorMsg = "Please check your e-mail address or password.";
         return res.status(401).json({ status: "fail", message: errorMsg });
     }
 
+    const userData = { ...user.toObject(), password: undefined , createdAt: undefined, createdBy: undefined, _id: undefined};
+    console.log(userData);
 
     const token = signToken(user.id)
 
@@ -64,8 +67,15 @@ exports.logIn = asyncErrHandler(async (req, res, next) => {
 
     res.status(200).json({
         status: "success",
-        user,
+        userData,
         token
+    })
+})
+
+exports.logOut = asyncErrHandler(async (req, res) => {
+    res.status(200).json({
+        status: "success",
+        message: 'Logout successful'
     })
 })
 

@@ -8,7 +8,7 @@ router.route("/signup").post(usersController.singUp)
 
 router.route("/login").post(usersController.logIn)
 
-// router.route("/logout").post(usersController.logOut)
+router.route("/logout").post(usersController.logOut)
 
 
 
