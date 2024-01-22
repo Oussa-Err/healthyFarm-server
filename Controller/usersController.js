@@ -32,6 +32,24 @@ exports.singUp = asyncErrHandler(async (req, res) => {
     })
 })
 
+exports.checkLogIn = asyncErrHandler(async (req, res) => {
+    console.log(req.session)
+    
+
+    try {
+        console.log("executed on success")
+        if (req.session.user) {
+            res.status(200).json({
+                status: "success",
+                loggedIn: true
+            })
+        }
+    } catch (error) {
+        console.log("executed on error: "+ error)
+        res.status(400).json({ loggedIn: false });
+    }
+})
+
 exports.logIn = asyncErrHandler(async (req, res, next) => {
     const { email, password } = req.body
 
@@ -53,11 +71,12 @@ exports.logIn = asyncErrHandler(async (req, res, next) => {
         return res.status(401).json({ status: "fail", message: errorMsg });
     }
 
-    const userData = { ...user.toObject(), password: undefined , createdAt: undefined, createdBy: undefined, _id: undefined};
-    console.log(userData);
+    const userData = { ...user.toObject(), password: undefined, createdAt: undefined, createdBy: undefined, _id: undefined };
 
     const token = signToken(user.id)
 
+
+    console.log(req.session)
     // res.cookie("jwt", token, {
     //     maxAge: 10000000,
     //     httpOnly: true,
@@ -73,6 +92,9 @@ exports.logIn = asyncErrHandler(async (req, res, next) => {
 })
 
 exports.logOut = asyncErrHandler(async (req, res) => {
+
+    // destroy session
+
     res.status(200).json({
         status: "success",
         message: 'Logout successful'
